@@ -103,9 +103,12 @@ ACowPlayer::ACowPlayer()
 ```
 
 ### 2.1.3: Blueprints
-On Unreal, select CowPlayer c++ and click on Create a new blueprint based on CowPlayer, name it "BP_PawnCowPlayer".
 
-. In the game view port, select tank and change Auto Possess Player to Player 0.
+On Unreal, select CowPlayer c++ and click on Create a new blueprint based on CowPlayer, name it "BP_PawnCowPlayer".
+In BP_PawnCowPlayer, View Port > Details > Static Mesh: select which static mesh you are going to use to physically represent your player in the world.
+Adjust the camera and the spring arm, camera and projectile spawn point position.
+In BP_PawnCowPlayer, View Port > Details > change Auto Possess Player to Player 0.
+In BP_PawnCowPlayer, View Port > Details > Rendering > disable player hidden in game from both BP_PawnCowPlayer(self) and BaseMesh.
 
 
 
