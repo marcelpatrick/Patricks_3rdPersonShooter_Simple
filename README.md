@@ -109,8 +109,11 @@ In BP_PawnCowPlayer, View Port > Details > Static Mesh: select which static mesh
 Adjust the camera and the spring arm, camera and projectile spawn point position.
 In BP_PawnCowPlayer, View Port > Details > change Auto Possess Player to Player 0.
 In BP_PawnCowPlayer, View Port > Details > Rendering > disable player hidden in game from both BP_PawnCowPlayer(self) and BaseMesh.
+Place the blueprint in the world and delete the default player start.
 
+## 2.2: Enemy Class:
 
+Create a new BP derived from BasePawn to be our enemy. Call it BP_PawnCowEnemy. Place it in the world
 
 
 
