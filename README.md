@@ -115,6 +115,7 @@ Place the blueprint in the world and delete the default player start.
 
 Create a new BP derived from BasePawn to be our enemy. Call it BP_PawnCowEnemy. Place it in the world
 
+## 2.3: Projectile Class:
 
 
 
