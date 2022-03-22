@@ -117,6 +117,58 @@ Create a new BP derived from BasePawn to be our enemy. Call it BP_PawnCowEnemy. 
 
 ## 2.3: Projectile Class:
 
+Create a projectile c++ class with Actor as parent.
 
+### 2.3.1: Declare Component Variables.
+
+In Projectile.h
+```cpp
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	UStaticMeshComponent* ProjectileMesh;
+```
+
+### 2.3.2: Construct Component Objects.
+```cpp
+AProjectile::AProjectile()
+{
+	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
+	RootComponent = ProjectileMesh;
+}
+```
+
+### 2.3.3: Blueprint
+Create a new BluePrint based on this projectile c++ class. Open it and select the projectile static mesh for this BP.
+
+
+# 3: User Input
+
+
+## 3.1: Create an axis mapping for movement and an action mapping for firing  
+Unreal > Edit > Project Settings > Input > Bindings > Axis Mapping / Action Mapping
+
+## 3.2: Bind the axis / action mapping to our action callback functions
+
+Declare the SetupPlayerInputComponent() function - exclude it from BasePawn - and the Move() and Turn() funtions in the Tank header file. 
+Include Speed and Turn Rate variables to fine tune the tank's movements.
+
+```cpp
+
+
+```
+
+Define our SetupPlayerInputComponent() in Tank.cpp
+Inside SetupPlayerInputComponent() bind each user input axis or action mapping to its correspondent action callback functions
+
+```cpp
+
+
+```
+Define the action callback functions Move() and Turn() in Tank.cpp:
+
+```cpp
+
+
+```
 
 
