@@ -146,14 +146,14 @@ Create a new BluePrint based on this projectile c++ class. Open it and select th
 
 ## 3.1: Create an axis mapping for movement and an action mapping for firing  
 
-Unreal > Edit > Project Settings > Input > Bindings > Axis Mapping / Action Mapping
-Click add and create one axis mapping function Move to move forwards and backwards: assign one key for forwards with value +1 and one key for backwards with value -1.
-Also create one function Turn for turning left and right and assign its respective keys with respective values
-Click add and create one action mapping function Fire for fire and assign a key to it.
+. Unreal > Edit > Project Settings > Input > Bindings > Axis Mapping / Action Mapping
+. Click add and create one axis mapping function Move to move forwards and backwards: assign one key for forwards with value +1 and one key for backwards with value -1.
+. Also create one function Turn for turning left and right and assign its respective keys with respective values
+. Click add and create one action mapping function Fire for fire and assign a key to it.
 
 ## 3.2: Bind the axis / action mapping to our action callback functions
 
-Exclude the SetupPlayerInputComponent() function from BasePawn.h and BasePawn.cpp and include it both in CowPlayer.h and CowPlayer.cpp.
+. Exclude the SetupPlayerInputComponent() function from BasePawn.h and BasePawn.cpp and include it both in CowPlayer.h and CowPlayer.cpp.
 In CowPlayer.h, Declare the Move() and Turn() funtions.
 Include Speed and Turn Rate variables to fine tune the player's movements.
 
@@ -171,11 +171,12 @@ Inside SetupPlayerInputComponent() bind each user input axis or action mapping t
 
 
 ```
-Define the action callback functions Move() and Turn() in Tank.cpp:
+Define the action callback functions Move() and Turn() in CowPlayer.cpp:
 
 ```cpp
 
 
 ```
 
-
+On unreal > select BP_PawnPlayer > Collision > collision presets > set to physicsActor 
+On unreal > select BP_PawnPlayer > physics > set simulate physics and enable gravity
