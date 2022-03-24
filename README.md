@@ -206,8 +206,43 @@ void ACowPlayer::Turn(float Value)
 }
 ```
 
-. In unreal > select BP_PawnPlayer > Collision > CapsuleComp > collision presets > set to physicsActor 
-. In unreal > select BP_PawnPlayer > physics > set simulate physics off for both the CapsuleComponent and the BaseMesh
-. Make sure you move the capsule and the base mesh a little above the ground so that they don't get stuck in the terrain
+- In unreal > select BP_PawnPlayer > Collision > CapsuleComp > collision presets > set to physicsActor 
+- In unreal > select BP_PawnPlayer > physics > set simulate physics off for both the CapsuleComponent and the BaseMesh
+- Make sure you move the capsule and the base mesh a little above the ground so that they don't get stuck in the terrain
 
+## 3.3: Fire Function:
+
+- In BasePawn.h, Declare the action callback function Fire(). 
+- Then Use TSubclassOf<> to spawn an object in our world that reflects a Blueprint and stores a UClass type object.
+
+```cpp
+
+//  UClass objects are Unreal objects that can communicate between c++ and Unreal blueprints. UClass translates any type of c++ class into an Unreal compatible class. This is necessary for the C++ class to be recognized by the Unreal Engine editor.
+
+
+```
+- In the BP_PawnCowPlayer blueprint > Combat > Projectile Class set BP_Projectile as the Projectile class to be spawned by the Player. 
+- Now the Tank's projectile class is set to our BP_Projectile type, which is a UClass type. Meaning that now our Player will spawn a projectile that is based on the blueprint that we created, BP_Projectile, and which already contains the static mesh of the projectile 3d representation. 
+- Had we not used TSubclassOf<> it would only spawn an object based on a raw c++ class which could not contain a static mesh. 
+- Do the same thing in BP_PawnCowEnemy blueprint.
+
+Define the action callback function Fire() in BasePawn.cpp - because this one will be inherited by both the Player and the Enemy actors.
+
+```cpp
+
+
+``` 
+### 3.3.1: Set the Projectile movement: 
+
+In Projectile.h, Declare the movement component variable
+```cpp
+
+
+```
+
+In Projectile.cpp, Define the projectile movement component 
+```cpp
+
+
+```
 
