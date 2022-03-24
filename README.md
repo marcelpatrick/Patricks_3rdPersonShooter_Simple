@@ -146,36 +146,64 @@ Create a new BluePrint based on this projectile c++ class. Open it and select th
 
 ## 3.1: Create an axis mapping for movement and an action mapping for firing  
 
-. Unreal > Edit > Project Settings > Input > Bindings > Axis Mapping / Action Mapping
-. Click add and create one axis mapping function Move to move forwards and backwards: assign one key for forwards with value +1 and one key for backwards with value -1.
-. Also create one function Turn for turning left and right and assign its respective keys with respective values
-. Click add and create one action mapping function Fire for fire and assign a key to it.
+- Unreal > Edit > Project Settings > Input > Bindings > Axis Mapping / Action Mapping
+- Click add and create one axis mapping function Move to move forwards and backwards: assign one key for forwards with value +1 and one key for backwards with value -1.
+- Also create one function Turn for turning left and right and assign its respective keys with respective values
+- Click add and create one action mapping function Fire for fire and assign a key to it.
 
 ## 3.2: Bind the axis / action mapping to our action callback functions
 
-. Exclude the SetupPlayerInputComponent() function from BasePawn.h and BasePawn.cpp and include it both in CowPlayer.h and CowPlayer.cpp.
-In CowPlayer.h, Declare the Move() and Turn() funtions.
-Include Speed and Turn Rate variables to fine tune the player's movements.
+- Exclude the SetupPlayerInputComponent() function from BasePawn.h and BasePawn.cpp and include it both in CowPlayer.h and CowPlayer.cpp.
+- In CowPlayer.h, Declare the Move() and Turn() and Fire() funtions.
+- Include Speed and Turn Rate variables to fine tune the player's movements.
 
 ```cpp
+private:
+		void Move(float Value);
+		void Turn(float Value);
+		void Fire();
 
-
+		UPROPERTY(EditAnywhere, Category = "Components")
+		float Speed = 600.f;
+		
+		UPROPERTY(EditAnywhere, Category = "Components")
+		float TurnRate = 100.f;
 ```
 
-Define our SetupPlayerInputComponent() in CowPlayer.cpp
-Inside SetupPlayerInputComponent() bind each user input axis or action mapping to its correspondent action callback functions
+- Define our SetupPlayerInputComponent() in CowPlayer.cpp
+- Inside SetupPlayerInputComponent() bind each user input axis or action mapping to its correspondent action callback functions
+- Define the action callback functions Move() and Turn() in CowPlayer.cpp
 
 ```cpp
 #include "Components/InputComponent.h"
 
+// Called to bind functionality to input
+void ACowPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    PlayerInputComponent->BindAxis(TEXT("Move"), this, &ACowPlayer::Move);
+    PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ACowPlayer::Turn);
+    PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ACowPlayer::Fire);
+}
 
-```
-Define the action callback functions Move() and Turn() in CowPlayer.cpp:
+void ACowPlayer::Move(float Value)
+{
+    FVector DeltaVector = FVector::ZeroVector;
 
-```cpp
+    DeltaVector.X = Value * Speed;
 
+    AddActorLocalOffset(DeltaVector, true);
+}
 
+void ACowPlayer::Turn(float Value)
+{
+    FRotator DeltaRotator = FRotator::ZeroRotator;
+
+    DeltaRotator.Yaw = Value * TurnRate;
+
+    AddActorLocalRotation(DeltaRotator, true);
+}
 ```
 
 . In unreal > select BP_PawnPlayer > Collision > CapsuleComp > collision presets > set to physicsActor 
