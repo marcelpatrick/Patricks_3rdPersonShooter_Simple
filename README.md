@@ -178,5 +178,8 @@ Define the action callback functions Move() and Turn() in CowPlayer.cpp:
 
 ```
 
-On unreal > select BP_PawnPlayer > Collision > collision presets > set to physicsActor 
-On unreal > select BP_PawnPlayer > physics > set simulate physics and enable gravity
+. In unreal > select BP_PawnPlayer > Collision > CapsuleComp > collision presets > set to physicsActor 
+. In unreal > select BP_PawnPlayer > physics > set simulate physics off for both the CapsuleComponent and the BaseMesh
+. Make sure you move the capsule and the base mesh a little above the ground so that they don't get stuck in the terrain
+
+
