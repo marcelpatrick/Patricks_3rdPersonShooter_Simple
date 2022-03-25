@@ -212,8 +212,14 @@ void ACowPlayer::Turn(float Value)
 
 ## 3.3: Fire Function:
 
+- For the player to fire a projectile, we need it to spawn a projectile object from the projectile spawn point. 
+- To do this, the Fire() function needs to call a projectile C++ class but this C++ class needs to connect to a blueprint with a mesh so that it can spawn a real object in the world. 
+- To make this connection (Reflection) between a C++ class on code and an Unreal Blueprint we need to use a UClass() - Unreal Class - from the type of the object we want to spawn.
+- This UClass() will be inside the player C++ code, and will connect to the Projectile blueprint when gets called by the Fire() function.
+- To Declare a UClass() we need to use a TSubclassOf<> template function.
+
 - In BasePawn.h, Declare the action callback function Fire(). 
-- Then Use TSubclassOf<> to spawn an object in our world that reflects a Blueprint and stores a UClass type object.
+- Then use TSubclassOf<> template function to declare a UClass() of type AProjectile.
 
 ```cpp
 
@@ -221,7 +227,7 @@ void ACowPlayer::Turn(float Value)
 
 
 ```
-- In the BP_PawnCowPlayer blueprint > Combat > Projectile Class set BP_Projectile as the Projectile class to be spawned by the Player. 
+- In the BP_PawnCowPlayer blueprint > Combat > Projectile Class set BP_Projectile as the ProjectileClass to be spawned by the Player. 
 - Now the Tank's projectile class is set to our BP_Projectile type, which is a UClass type. Meaning that now our Player will spawn a projectile that is based on the blueprint that we created, BP_Projectile, and which already contains the static mesh of the projectile 3d representation. 
 - Had we not used TSubclassOf<> it would only spawn an object based on a raw c++ class which could not contain a static mesh. 
 - Do the same thing in BP_PawnCowEnemy blueprint.
