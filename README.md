@@ -217,38 +217,68 @@ void ACowPlayer::Turn(float Value)
 - To make this connection (Reflection) between a C++ class on code and an Unreal Blueprint we need to use a UClass() - Unreal Class - from the type of the object we want to spawn.
 - This UClass() will be inside the player C++ code, and will connect to the Projectile blueprint when gets called by the Fire() function.
 - To Declare a UClass() we need to use a TSubclassOf<> template function.
+- Had we not used UClass() it would only spawn an object based on a raw c++ class which could not contain a static mesh. 
+
+Mouse click > Binding > Fire() > projectile UClass > BP_Projectile > spawn projectile mesh in the world
 
 - In BasePawn.h, Declare the action callback function Fire(). 
 - Then use TSubclassOf<> template function to declare a UClass() of type AProjectile.
 
 ```cpp
-
-//  UClass objects are Unreal objects that can communicate between c++ and Unreal blueprints. UClass translates any type of c++ class into an Unreal compatible class. This is necessary for the C++ class to be recognized by the Unreal Engine editor.
-
-
+protected:
+	void Fire();
+	
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class AProjectile> ProjectileClass;
 ```
-- In the BP_PawnCowPlayer blueprint > Combat > Projectile Class set BP_Projectile as the ProjectileClass to be spawned by the Player. 
-- Now the Tank's projectile class is set to our BP_Projectile type, which is a UClass type. Meaning that now our Player will spawn a projectile that is based on the blueprint that we created, BP_Projectile, and which already contains the static mesh of the projectile 3d representation. 
-- Had we not used TSubclassOf<> it would only spawn an object based on a raw c++ class which could not contain a static mesh. 
+
+- In the BP_PawnCowPlayer blueprint > Details > Combat > Projectile Class set BP_Projectile as the ProjectileClass to be spawned by the Player.
 - Do the same thing in BP_PawnCowEnemy blueprint.
 
 Define the action callback function Fire() in BasePawn.cpp - because this one will be inherited by both the Player and the Enemy actors.
-
 ```cpp
+#include "Projectile.h"
 
+void ABasePawn::Fire()
+{
+	// Spawn projectile from the projectile spawn point
+	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
 
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+
+	//Set the owner of this projectile to whomever is firing now so that we know who hit and who got hit
+	Projectile->SetOwner(this);
+}
 ``` 
+
 ### 3.3.1: Set the Projectile movement: 
 
 In Projectile.h, Declare the movement component variable
 ```cpp
+#include "GameFramework/ProjectileMovementComponent.h"
 
-
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	UProjectileMovementComponent* ProjectileMovement;
 ```
 
-In Projectile.cpp, Define the projectile movement component 
+In Projectile.cpp, construct the projectile movement component 
 ```cpp
+AProjectile::AProjectile()
+{
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
+	ProjectileMovementComponent->MaxSpeed = 1300.f;
+	ProjectileMovementComponent->InitialSpeed = 1300.f;
+}
+```
 
-
+In CowPlayer.cpp, call the fire function of the the parent class
+```cpp
+void ACowPlayer::Fire()
+{
+    Super::Fire();
+}
 ```
 
