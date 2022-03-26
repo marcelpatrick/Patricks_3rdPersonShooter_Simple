@@ -282,3 +282,30 @@ void ACowPlayer::Fire()
 }
 ```
 
+## 3.5: Implement the Fire function for the Enemies (including a timer)
+
+Create a C++ class inheriting from based pawn to be the enemies class, CowEnemy.cpp
+
+- In CowEnemy.h, Create a Tick and begin play functions and override them. 
+- Also create a CowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
+- Also, create a variable type FTimerHandle to store info about the world time and pass this as parameter to set our timer with a delay for the fire rate. 
+- Declare a CheckFireCondition() function to check if it is the right moment to fire and a InFireRange() function to trigger if Player is within fire range: 
+```cpp
+
+
+```
+
+In Player.h, Declare a bool to tell if the tank is still alive, if it is not, stop firing at it
+```cpp
+
+
+```
+
+- In Enemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the tank if it is in range. 
+- Also Define our custom BeginPlay function to get the Player location in order for the enemy to follow it. 
+- Then create a player pointer variable to store its location and set the timer. 
+- Also, Define CheckFireCondition() and InFireRange functions.
+```cpp
+
+
+```
