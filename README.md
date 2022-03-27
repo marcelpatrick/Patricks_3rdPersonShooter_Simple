@@ -286,25 +286,29 @@ void ACowPlayer::Fire()
 
 Create a C++ class inheriting from base pawn to be the enemies class, CowEnemy.cpp
 
-- In CowEnemy.h, Create a Tick and begin play functions and override them. 
-- Also create a CowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
-- Also, create a variable type FTimerHandle to store info about the world time and pass this as parameter to set our timer with a delay for the fire rate. 
+- In CowEnemy.h, Create a Tick that takes in a float DeltaTime parameter and overrides the tick function that got inherited from base pawn. (before compiling, define Tick function on CowEnemy.cpp
+- Declare a begin play function and also override the inherited begin play function. (before compiling, define BeginPlay function in CowEnemy.cpp)
+- Create a CowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
+- Create a variable type FTimerHandle to store info about the world time and pass this as parameter to set our timer with a delay for the fire rate. 
+- Declare a fire rate and fire range variables to adjust these parameters for the enemies fire conditions
 - Declare a CheckFireCondition() function to check if it is the right moment to fire and a InFireRange() function to trigger if Player is within fire range: 
+- Declare a RotateActor() function to rotate the enemy towards the player that take a FVector.
 ```cpp
 
 
 ```
 
-In Player.h, Declare a bool to tell if the tank is still alive, if it is not, stop firing at it
+In CowPlayer.h, Declare a bool to tell if the tank is still alive, if it is not, stop firing at it
 ```cpp
 
 
 ```
 
-- In Enemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the tank if it is in range. 
-- Also Define our custom BeginPlay function to get the Player location in order for the enemy to follow it. 
-- Then create a player pointer variable to store its location and set the timer. 
-- Also, Define CheckFireCondition() and InFireRange functions.
+
+- In CowEnemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the tank if it is in range. 
+- Define our custom BeginPlay function to get the Player location in order for the enemy to follow it. 
+- Create a player pointer variable to store its location and set the timer. 
+- Define CheckFireCondition() and InFireRange() functions.
 ```cpp
 
 
