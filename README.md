@@ -284,7 +284,7 @@ void ACowPlayer::Fire()
 
 ## 3.5: Implement the Fire function for the Enemies (including a timer)
 
-Create a C++ class inheriting from based pawn to be the enemies class, CowEnemy.cpp
+Create a C++ class inheriting from base pawn to be the enemies class, CowEnemy.cpp
 
 - In CowEnemy.h, Create a Tick and begin play functions and override them. 
 - Also create a CowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
