@@ -113,7 +113,9 @@ Place the blueprint in the world and delete the default player start.
 
 ## 2.2: Enemy Class:
 
-Create a new BP derived from BasePawn to be our enemy. Call it BP_PawnCowEnemy. Place it in the world
+Create a new C++ class inheriting from BasePawn.cpp and call it CowEnemy.
+
+Create a new BP derived from CowEnemy.cpp to be our enemy. Call it BP_PawnCowEnemy. Place it in the world
 
 ## 2.3: Projectile Class:
 
@@ -286,30 +288,76 @@ void ACowPlayer::Fire()
 
 Create a C++ class inheriting from base pawn to be the enemies class, CowEnemy.cpp
 
-- In CowEnemy.h, Create a Tick that takes in a float DeltaTime parameter and overrides the tick function that got inherited from base pawn. (before compiling, define Tick function on CowEnemy.cpp
+- In CowEnemy.h, Create a Tick function that takes in a float DeltaTime parameter and overrides the tick function that got inherited from base pawn. (before compiling, define Tick function on CowEnemy.cpp
 - Declare a begin play function and also override the inherited begin play function. (before compiling, define BeginPlay function in CowEnemy.cpp)
-- Create a CowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
+- Create a ACowPlayer* pointer to store the Player's location in order for the enemies to find it and follow it. 
 - Create a variable type FTimerHandle to store info about the world time and pass this as parameter to set our timer with a delay for the fire rate. 
 - Declare a fire rate and fire range variables to adjust these parameters for the enemies fire conditions
 - Declare a CheckFireCondition() function to check if it is the right moment to fire and a InFireRange() function to trigger if Player is within fire range: 
-- Declare a RotateActor() function to rotate the enemy towards the player that take a FVector.
 ```cpp
+#include "CowPlayer.h"
 
 
+public:
+
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+
+	virtual void BeginPlay() override;
+
+private:
+
+	ACowPlayer* CowPlayerPointer;
+
+	FTimerHandle TimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float FireRate = 2.f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float FireRange = 100.f;
+
+	void CheckFireCondition();
+
+	bool InFireRange();
 ```
 
 In CowPlayer.h, Declare a bool to tell if the tank is still alive, if it is not, stop firing at it
 ```cpp
-
-
+public:
+	bool bAlive = true;
 ```
 
 
-- In CowEnemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the tank if it is in range. 
-- Define our custom BeginPlay function to get the Player location in order for the enemy to follow it. 
-- Create a player pointer variable to store its location and set the timer. 
+- in BasePawn.h , Declare a RotateActor() function to rotate the enemy towards the player that take a FVector.
+```cpp
+protected:
+	void RotateActor(FVector LookAtTarget);
+```
+
+- In BasePawn.cpp, Define RotateActor() function
+```cpp
+void ABasePawn::RotateActor(FVector LookAtTarget)
+{
+	//This vector will be the distance between the target and the base mesh of the actor who is aimig at it
+	FVector ToTarget = LookAtTarget - BaseMesh->GetComponentLocation();
+
+	//Adjust the players rotation to look in the direction (yaw) that our vector is pointing to
+	FRotator RotateToTarget = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+
+	//Set actor rotation passing our rotator variable as a parameter
+	BaseMesh->SetWorldRotation(RotateToTarget);
+}
+```
+- Define our custom BeginPlay function to get the Player location in order for the enemy to follow it.
+- 
+- In CowEnemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the player if it is in range. 
+
 - Define CheckFireCondition() and InFireRange() functions.
 ```cpp
+#include "Kismet/GameplayStatics.h"
+
 
 
 ```
