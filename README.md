@@ -350,14 +350,62 @@ void ABasePawn::RotateActor(FVector LookAtTarget)
 	BaseMesh->SetWorldRotation(RotateToTarget);
 }
 ```
-- Define our custom BeginPlay function to get the Player location in order for the enemy to follow it.
-- 
-- In CowEnemy.cpp, Define our custom tick function to find the player location and rotate the enemy towards the player if it is in range. 
-
+- In CowEnemy.cpp, Define our custom BeginPlay function to get the Player location in order for the enemy to follow it.
+- Define our custom tick function to find the player location and rotate the enemy towards the player if it is in range. 
 - Define CheckFireCondition() and InFireRange() functions.
 ```cpp
 #include "Kismet/GameplayStatics.h"
 
+void ACowEnemy::BeginPlay()
+{
+
+    Super::BeginPlay();
+
+    //Access the player through its pawn and store this result inside our player pointer
+    CowPlayerPointer = Cast<ACowPlayer>(UGameplayStatics::GetPlayerPawn(
+        this, /*world context*/ 
+        0 /*player index, which player we are talking about*/ 
+        ));
+
+    //GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ACowEnemy::CheckFireCondition, FireRate, true);
+
+}
+
+void ACowEnemy::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    if (InFireRange())
+    {
+        RotateActor(CowPlayerPointer->GetActorLocation());
+    }
+}
+
+
+bool ACowEnemy::InFireRange()
+{
+    if (CowPlayerPointer)
+    {
+        float Distance = FVector::Dist(GetActorLocation(), CowPlayerPointer->GetActorLocation());
+        if (Distance <= FireRange)
+        {
+            return true;   
+        }
+    }
+    return false;
+}
+
+void ACowEnemy::CheckFireCondition()
+{
+    if (CowPlayerPointer == nullptr)
+    {
+        return;
+    }
+
+    if (InFireRange() && CowPlayerPointer->bAlive)
+    {
+        Fire();
+    }
 
 
 ```
