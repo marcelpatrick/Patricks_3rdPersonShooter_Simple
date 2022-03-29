@@ -337,6 +337,7 @@ protected:
 ```
 
 - In BasePawn.cpp, Define RotateActor() function
+- (I added -90.f degrees to the yaw in the RotateToTarget Rotator because the static mesh was always turning sideways instead of facing the player. so these -90 degrees act as an adjustment to that).
 ```cpp
 void ABasePawn::RotateActor(FVector LookAtTarget)
 {
