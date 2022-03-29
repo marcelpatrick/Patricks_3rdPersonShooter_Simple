@@ -344,7 +344,7 @@ void ABasePawn::RotateActor(FVector LookAtTarget)
 	FVector ToTarget = LookAtTarget - BaseMesh->GetComponentLocation();
 
 	//Adjust the players rotation to look in the direction (yaw) that our vector is pointing to
-	FRotator RotateToTarget = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+	FRotator RotateToTarget = FRotator(0.f, ToTarget.Rotation().Yaw -90.f, 0.f);
 
 	//Set actor rotation passing our rotator variable as a parameter
 	BaseMesh->SetWorldRotation(RotateToTarget);
