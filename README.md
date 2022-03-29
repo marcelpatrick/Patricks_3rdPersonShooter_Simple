@@ -337,7 +337,7 @@ protected:
 ```
 
 - In BasePawn.cpp, Define RotateActor() function
-- (I added -90.f degrees to the yaw in the RotateToTarget Rotator because the static mesh was always turning sideways instead of facing the player. so these -90 degrees act as an adjustment to that).
+- (I added -90.f degrees to the yaw in the RotateToTarget Rotator because the static mesh was always turning sideways instead of facing the player. so these -90 degrees act as an adjustment to that. I also had to turn the ProjectileSpawnPoint + 90.f in respect to the world).
 ```cpp
 void ABasePawn::RotateActor(FVector LookAtTarget)
 {
@@ -356,6 +356,7 @@ void ABasePawn::RotateActor(FVector LookAtTarget)
 - Define CheckFireCondition() and InFireRange() functions.
 ```cpp
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 
 void ACowEnemy::BeginPlay()
 {
@@ -368,7 +369,7 @@ void ACowEnemy::BeginPlay()
         0 /*player index, which player we are talking about*/ 
         ));
 
-    //GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ACowEnemy::CheckFireCondition, FireRate, true);
+    GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ACowEnemy::CheckFireCondition, FireRate, true);
 
 }
 
@@ -407,6 +408,4 @@ void ACowEnemy::CheckFireCondition()
     {
         Fire();
     }
-
-
 ```
