@@ -538,6 +538,6 @@ In HealthComponent.cpp Define the Callback Function DamageTaken() that is bound 
 In HealthComponent.cpp, Define the Multicast Delegate Function OnTakeAnyDamage and bind it to its Callback Function DamageTaken.
 ```cpp
 
-
+ 
 ```
 
