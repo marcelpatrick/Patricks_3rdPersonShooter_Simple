@@ -517,9 +517,9 @@ In HealthComponent.cpp Define and ininitialize the health variables
 
 Include our custom component in our Blueprint. In BP_PawnTank, event graph, HealthComponent and do the same for BP_PawnTurret.
 
-Use UGameplayStatics::ApplyDamage to trigger the damage event > Use the OnTakeAnyDamage() Delegate Function to Broadcast the damage event > and call the DamageTaken() Callback Function to > do what the damage will cause to the actors' health.
-
 ## 4.2.3: Callback Function:
+
+Use UGameplayStatics::ApplyDamage to trigger the damage event > Use the OnTakeAnyDamage() Delegate Function to Broadcast the damage event > and call the DamageTaken() Callback Function to > do what the damage will cause to the actors' health.
 
 In HealthComponent.h Declare the Callback Function DamageTaken()
 ```cpp
