@@ -499,4 +499,43 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 }
 ```
 
+## 4.2.2: Create a new HealthComponent c++ class in Unreal derived from Actor Component. 
+
+In HealhComponent.h create health variables 
+```cpp
+
+
+```
+
+In HealthComponent.cpp Define and ininitialize the health variables
+```cpp
+
+
+```
+
+Include our custom component in our Blueprint. In BP_PawnTank, event graph, HealthComponent and do the same for BP_PawnTurret.
+
+Use UGameplayStatics::ApplyDamage to trigger the damage event > Use the OnTakeAnyDamage() Delegate Function to Broadcast the damage event > and call the DamageTaken() Callback Function to > do what the damage will cause to the actors' health.
+
+## 4.2.3: Multicast Delegate:
+
+In HealthComponent.cpp, Define the Multicast Delegate Function OnTakeAnyDamage and bind it to its Callback Function DamageTaken.
+```cpp
+
+
+```
+
+## 4.2.4: Callback Function:
+
+In HealthComponent.h Declare the Callback Function DamageTaken()
+```cpp
+
+
+```
+
+In HealthComponent.cpp Define the Callback Function DamageTaken() that is bound to OnTakeAnyDamage() Multicast Delegate Function that owns this HealthComponent. Inside it specify what kind of damage it will cause to the Health variables. 
+```cpp
+
+
+```
 
