@@ -505,13 +505,22 @@ Create a new HealthComponent c++ class in Unreal derived from Actor Component.
 
 In HealhComponent.h create health variables 
 ```cpp
+private:
 
+	UPROPERTY(EditAnywhere)
+	float MaxHealth = 100.f;
 
+	float Health = 0.f;
 ```
 
 In HealthComponent.cpp Define and ininitialize the health variables
 ```cpp
+void UHealthComponent2::BeginPlay()
+{
+	Super::BeginPlay();
 
+	Health = MaxHealth;
+}
 
 ```
 
@@ -523,21 +532,40 @@ Use UGameplayStatics::ApplyDamage to trigger the damage event > Use the OnTakeAn
 
 In HealthComponent.h Declare the Callback Function DamageTaken()
 ```cpp
-
+private:
+	//Callback damage function
+	UFUNCTION()
+	void DamageTaken(
+		AActor* DamagedActor, 
+		float Damage, 
+		const UDamageType* DamageType, 
+		AController* MyOwnerInstigator, 
+		AActor* DamageCauser);
 
 ```
 
 In HealthComponent.cpp Define the Callback Function DamageTaken() that is bound to OnTakeAnyDamage() Multicast Delegate Function that owns this HealthComponent. Inside it specify what kind of damage it will cause to the Health variables. 
 ```cpp
+void UHealthComponent2::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* MyOwnerInstigator, AActor* DamageCauser)
+{
 
+	if (Damage <= 0.f) return;
 
+	Health -= Damage;
+
+	UE_LOG(LogTemp, Warning, TEXT("Voce foi atingido!!!, seu Health atual é de: %f"), Health);
+}
 ```
 
 ## 4.2.4: Multicast Delegate:
 
 In HealthComponent.cpp, Define the Multicast Delegate Function OnTakeAnyDamage and bind it to its Callback Function DamageTaken.
 ```cpp
-
+void UHealthComponent2::BeginPlay()
+{
+	//Call the multicast delegate function
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent2::DamageTaken);	
+}
  
 ```
 
