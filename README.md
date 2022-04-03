@@ -599,6 +599,55 @@ In Cow3rdPersonPlayerController.cpp, Define this function.
 ### 5.1.2: Create a blueprint based on the C++ class
 Create a BP_Cow3rdPersonPlayerController blueprint based on this Cow3rdPersonPlayerController class.
 
-Open BP_Cow3rdPersonPlayerController, in Class > PlayerController class: change the player controller to our custom BP_Cow3rdPersonPlayerController.
 
-In BP_Cow3rdPersonPlayerController, Mouse interface > default mouse cursor > change it to crosshairs
+## 5.2: GameMode: START / STOP
+
+Define when the game starts and stops
+
+### 5.2.1: Create a C++ class:
+Create a new c++ class with Game Mode Base as parent class: Cow3rdPersonGameMode. 
+
+### 5.2.2: Create a blueprint based on this C++ class:
+Create a new blueprint BP_Cow3rdPersonGameMode based on this new class.
+
+Open BP_Cow3rdPersonGameMode > Details > in Classes > PlayerController class: change the player controller to our custom BP_Cow3rdPersonPlayerController.
+
+In BP_Cow3rdPersonGameMode > Details > Classes > Default Pawn Class, change it to BP_PawnCowPlayer so that this will define the default pawn to be possessed when we start the game as being the tank - we will play as this actor
+
+In Edit > Project settings > Maps and Modes > Default Modes > Default Game Mode, change the default game mode to BP_Cow3rdPersonGameMode.
+
+In the world > Select the BP_PawnCowPlayer actor, in Details > Pawn > Auto Possess player > selct Player0.
+
+### 5.2.3: Declare the variables and functions
+
+In ToonTanksGameMode.h, override BeginPlay() so that we can define out own actions when the game begins.
+Declare a StartGame() function to allows us to define in which moment the game will start.
+Declare a pointer variable that allows us to have access to the player controller.
+Declare a variable to time untill the game starts.
+Declare a function to define when the game starts.
+Declare a function to count the number of enemies that are still alive.
+Declare a variable to store the current number of enemies still alive.
+```cpp
+
+```
+
+### 5.2.4: Define the variables and functions
+
+In ToonTanksGameMode.cpp 
+Define the value of the player controller pointer.
+Define when the game will start and what conditions need to be in place for this to happen.
+Define a function to count all alive enemies in the world, call in on game start and pass the current result to a variable.
+Set the timer.
+
+#### (not implementing 164: the Start Game Widget, 165: Countdown Timer, 166: Display Countdown Time)
+
+```cpp
+
+
+```
+
+
+## 5.3: GameMode: DEATH
+
+
+
