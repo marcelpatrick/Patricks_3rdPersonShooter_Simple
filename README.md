@@ -580,25 +580,25 @@ The Game Mode will be responsible for defining winning, loosing and death condit
 Implement our custom Player Controller class. This class will be used to be called from the GameMode when the actor dies to disable input.
 
 ### 5.1.1: Create a C++ class.
-Create ToonTanksPlayerController c++ class. 
+Create a c++ class derived from Player Controller: Cow3rdPersonPlayerController. 
 
 #### 5.1.1.1: Declare:
-In ToonTanksPlayerController.h, Declare a function to switch whether inputs will be enabled or disabled.
+In Cow3rdPersonPlayerController.h, Declare a function to switch whether inputs will be enabled or disabled.
 ```cpp
 
 
 ```
 
 #### 5.1.1.2: Define:
-In ToonTanksPlayerController.cpp, Define this function.
+In Cow3rdPersonPlayerController.cpp, Define this function.
 ```cpp
 
 
 ```
 
 ### 5.1.2: Create a blueprint based on the C++ class
-Create a BP_ToonTanksPlayerController blueprint based on this ToonTanksPlayerController class.
+Create a BP_Cow3rdPersonPlayerController blueprint based on this Cow3rdPersonPlayerController class.
 
-Open BP_ToonTanksPlayerController, in Class > PlayerController class: change the player controller to our custom BP_ToonTanksPlayerController.
+Open BP_Cow3rdPersonPlayerController, in Class > PlayerController class: change the player controller to our custom BP_Cow3rdPersonPlayerController.
 
-In BP_ToonTanksPlayerController, Mouse interface > default mouse cursor > change it to crosshairs
+In BP_Cow3rdPersonPlayerController, Mouse interface > default mouse cursor > change it to crosshairs
