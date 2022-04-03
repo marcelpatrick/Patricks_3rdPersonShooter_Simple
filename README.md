@@ -569,3 +569,38 @@ void UHealthComponent2::BeginPlay()
  
 ```
 
+
+# 5: Game Rules and Game Mode.
+
+The Game Mode will be responsible for defining winning, loosing and death conditions, starting and ending the game and defining who the player0 is (default pawn).
+
+
+## 5.1: Player Controller
+
+Implement our custom Player Controller class
+
+This class will be used to define the mouse cursor. It will also be called from the GameMode when the actor dies to disable input.
+
+### 5.1.1: Create a C++ class.
+Create ToonTanksPlayerController c++ class. 
+
+#### 5.1.1.1: Declare:
+In ToonTanksPlayerController.h, Declare a function to switch whether inputs will be enabled or disabled.
+```cpp
+
+
+```
+
+#### 5.1.1.2: Define:
+In ToonTanksPlayerController.cpp, Define this function.
+```cpp
+
+
+```
+
+### 5.1.2: Create a blueprint based on the C++ class
+Create a BP_ToonTanksPlayerController blueprint based on this ToonTanksPlayerController class.
+
+Open BP_ToonTanksPlayerController, in Class > PlayerController class: change the player controller to our custom BP_ToonTanksPlayerController.
+
+In BP_ToonTanksPlayerController, Mouse interface > default mouse cursor > change it to crosshairs
