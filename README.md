@@ -577,9 +577,7 @@ The Game Mode will be responsible for defining winning, loosing and death condit
 
 ## 5.1: Player Controller
 
-Implement our custom Player Controller class
-
-This class will be used to define the mouse cursor. It will also be called from the GameMode when the actor dies to disable input.
+Implement our custom Player Controller class. This class will be used to be called from the GameMode when the actor dies to disable input.
 
 ### 5.1.1: Create a C++ class.
 Create ToonTanksPlayerController c++ class. 
