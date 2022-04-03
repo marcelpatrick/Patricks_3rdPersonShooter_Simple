@@ -620,30 +620,54 @@ In the world > Select the BP_PawnCowPlayer actor, in Details > Pawn > Auto Posse
 
 ### 5.2.3: Declare the variables and functions
 
-In ToonTanksGameMode.h, override BeginPlay() so that we can define out own actions when the game begins.
-Declare a StartGame() function to allows us to define in which moment the game will start.
-Declare a pointer variable that allows us to have access to the player controller.
-Declare a variable to time untill the game starts.
-Declare a function to define when the game starts.
-Declare a function to count the number of enemies that are still alive.
-Declare a variable to store the current number of enemies still alive.
+In Cow3rdPersonGameMode.h, override BeginPlay() so that we can define out own actions when the game begins.
+- Declare a BeginPlay() function and override the custom BeginPlay() function.
+- Declare a pointer variable that allows us to have access to the player controller.
+- Declare a function to count the number of enemies that are still alive.
+- Declare a variable to store the current number of enemies still alive and initialize it to zero.
 ```cpp
+#include "Cow3rdPersonPlayerController.h"
 
+	protected:
+		virtual void BeginPlay() override;
+
+	private:
+		ACow3rdPersonPlayerController* Cow3rdPersonPlayerController; 
+
+		int32 TargetCows = 0;
+
+		int32 GetTargetCowsCount();
 ```
 
 ### 5.2.4: Define the variables and functions
 
-In ToonTanksGameMode.cpp 
-Define the value of the player controller pointer.
-Define when the game will start and what conditions need to be in place for this to happen.
-Define a function to count all alive enemies in the world, call in on game start and pass the current result to a variable.
-Set the timer.
-
-#### (not implementing 164: the Start Game Widget, 165: Countdown Timer, 166: Display Countdown Time)
-
+In Cow3rdPersonGameMode.cpp 
+- Define the value of the player controller pointer.
+- Define a function to count all alive enemies in the world, call in on game start and pass the current result to a variable.
 ```cpp
+#include "CowEnemy.h"
+#include "Kismet/GameplayStatics.h"
 
+void ACow3rdPersonGameMode::BeginPlay()
+{
+    Super::BeginPlay();
 
+    Cow3rdPersonPlayerController = Cast<ACow3rdPersonPlayerController>(UGameplayStatics::GetPlayerController(this, 0)); 
+
+    GetTargetCowsCount();
+}
+
+int32 ACow3rdPersonGameMode::GetTargetCowsCount()
+{
+
+    TArray<AActor*> Enemies;
+
+    UGameplayStatics::GetAllActorsOfClass(this, ACowEnemy::StaticClass(), Enemies);
+
+    UE_LOG(LogTemp, Warning, TEXT("numero de enemies = %i"), Enemies.Num());
+
+    return Enemies.Num();
+}
 ```
 
 
