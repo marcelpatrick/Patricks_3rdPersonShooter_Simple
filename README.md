@@ -673,5 +673,33 @@ int32 ACow3rdPersonGameMode::GetTargetCowsCount()
 
 ## 5.3: GameMode: DEATH
 
+- **HIT**: Projectile Component hits an Actor > it triggers a Hit Event > the Multicast Delegate function **OnComponentHit**, in the Projectile class, listens to this event and broadcasts **FHitResult** to the Callback Function **OnHit()**, also in the Projectile class, bound to it by **AddDynamic** 
+   - **DAMAGE**: > the **OnHit()** Callback function will apply the damage using **UGamePlaystatics::ApplyDamage()** function inside it > **UGameplayStatics::ApplyDamage()** triggers a Damage Event > the Multicast Delegate function **OnTakeAnyDamage**, in HealthComponent class, listens to this event and broadcasts the damage parameters to the Callback function **DamageTaken()**, also in the HealthComponent class, bound to it by **AddDynamic** > **DamageTaken()** Callback function updates the health variables declared in HealthComponent.h, decreasing the health of the damaged actors
+       - **DEATH**: > (If Health <= 0) > From inside **DamageTaken()** callback function, call the **ActorDied()** function in the ToonTanksGameMode class > From inside **ActorDied()**, call the **HandleDestruction()** function in the BasePawn class that defines what happens when the actor gets destroyed - special effects, particles, sound - and hides the actor from the game so that it is no longer visible.
+
+### 5.3.1: ActorDied() function
+
+In ToonTanksGameMode.h Declare the ActorDied() function. Add a Tank variable to check if the dead actor was the tank or the tower. Override BeginPlay().
+```cpp
+
+
+```
+
+In ToonTanksGameMode.cpp 
+Define ActorDied() function. If the actor who died was the tank (and not the tower) call the HandleDestruction() function.
+Define BeginPlay() and call HandleGameStart() from whithin it
+Define a HandleGameStart() function to define when the game can start (Timer), when the player can be enabled to move once the game starts and to initialize the ToonTanksPlayerController variable
+```cpp
+
+
+```
+
+### 5.3.2: Call the ActorDied() function from the HealthComponent class to perform the death actions when Health reaches 0.
+
+In HealthComponent.cpp, call ActorDied() from the DamageTaken() callback function to perform death when damage makes the Health variables reach 0.
+```cpp
+
+
+```
 
 
