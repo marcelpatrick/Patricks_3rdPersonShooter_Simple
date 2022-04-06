@@ -679,16 +679,16 @@ int32 ACow3rdPersonGameMode::GetTargetCowsCount()
 
 ### 5.3.1: ActorDied() function
 
-In ToonTanksGameMode.h Declare the ActorDied() function. Add a Tank variable to check if the dead actor was the tank or the tower. Override BeginPlay().
+- In Cow_3rdPersonGameMode.h Declare the ActorDied() function. 
+- Add a Player variable to check if the dead actor was the Player or the Enemy. 
+- Override BeginPlay().
 ```cpp
 
 
 ```
 
-In ToonTanksGameMode.cpp 
-Define ActorDied() function. If the actor who died was the tank (and not the tower) call the HandleDestruction() function.
-Define BeginPlay() and call HandleGameStart() from whithin it
-Define a HandleGameStart() function to define when the game can start (Timer), when the player can be enabled to move once the game starts and to initialize the ToonTanksPlayerController variable
+In Cow_3rdPersonGameMode.cpp 
+- Define ActorDied() function. If the actor who died was the Player (and not the Enemy) call the HandleDestruction() function.
 ```cpp
 
 
