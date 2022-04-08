@@ -622,21 +622,11 @@ In the world > Select the BP_PawnCowPlayer actor, in Details > Pawn > Auto Posse
 
 In Cow3rdPersonGameMode.h, override BeginPlay() so that we can define out own actions when the game begins.
 - Declare a BeginPlay() function and override the custom BeginPlay() function.
-- Declare a pointer variable that allows us to have access to the player controller.
-- Declare a function to count the number of enemies that are still alive.
-- Declare a variable to store the current number of enemies still alive and initialize it to zero.
 ```cpp
 #include "Cow3rdPersonPlayerController.h"
 
 	protected:
 		virtual void BeginPlay() override;
-
-	private:
-		ACow3rdPersonPlayerController* Cow3rdPersonPlayerController; 
-
-		int32 TargetCows = 0;
-
-		int32 GetTargetCowsCount();
 ```
 
 ### 5.2.4: Define the variables and functions
@@ -645,28 +635,9 @@ In Cow3rdPersonGameMode.cpp
 - Define the value of the player controller pointer.
 - Define a function to count all alive enemies in the world, call in on game start and pass the current result to a variable.
 ```cpp
-#include "CowEnemy.h"
-#include "Kismet/GameplayStatics.h"
-
 void ACow3rdPersonGameMode::BeginPlay()
 {
     Super::BeginPlay();
-
-    Cow3rdPersonPlayerController = Cast<ACow3rdPersonPlayerController>(UGameplayStatics::GetPlayerController(this, 0)); 
-
-    GetTargetCowsCount();
-}
-
-int32 ACow3rdPersonGameMode::GetTargetCowsCount()
-{
-
-    TArray<AActor*> Enemies;
-
-    UGameplayStatics::GetAllActorsOfClass(this, ACowEnemy::StaticClass(), Enemies);
-
-    UE_LOG(LogTemp, Warning, TEXT("numero de enemies = %i"), Enemies.Num());
-
-    return Enemies.Num();
 }
 ```
 
@@ -677,29 +648,175 @@ int32 ACow3rdPersonGameMode::GetTargetCowsCount()
    - **DAMAGE**: > the **OnHit()** Callback function will apply the damage using **UGamePlaystatics::ApplyDamage()** function inside it > **UGameplayStatics::ApplyDamage()** triggers a Damage Event > the Multicast Delegate function **OnTakeAnyDamage**, in HealthComponent class, listens to this event and broadcasts the damage parameters to the Callback function **DamageTaken()**, also in the HealthComponent class, bound to it by **AddDynamic** > **DamageTaken()** Callback function updates the health variables declared in HealthComponent.h, decreasing the health of the damaged actors
        - **DEATH**: > (If Health <= 0) > From inside **DamageTaken()** callback function, call the **ActorDied()** function in the ToonTanksGameMode class > From inside **ActorDied()**, call the **HandleDestruction()** function in the BasePawn class that defines what happens when the actor gets destroyed - special effects, particles, sound - and hides the actor from the game so that it is no longer visible.
 
-### 5.3.1: ActorDied() function
+### 5.3.1: HandleDestruction()
 
-- In Cow_3rdPersonGameMode.h Declare the ActorDied() function. 
+- Create a function to destroy the player that got killed. implement it on basepawn and inside each player class
+
+In BasePawn.h declare HandleDestruction(), BeginPlay and Tick
+```cpp
+public:
+	void HandleDestruction();
+	
+	virtual void Tick(float DeltaTime) override;
+	
+protected:
+	virtual void BeginPlay() override;
+```
+
+In BasePawn.cpp define HandleDestruction, BeginPlay and Tick
+```cpp
+void ABasePawn::HandleDestruction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Handle destruction called, Actor Died!!!!!!!!!! "));
+}
+
+// Called when the game starts or when spawned
+void ABasePawn::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ABasePawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+```
+
+In CowPlayer.h define HandleDestruction
+```cpp
+public:
+	void HandleDestruction();
+```
+
+In CowPlayer.cpp 
+- declare HandleDestruction()
+- In BeginPlay, initialize player controller
+```cpp
+void ACowPlayer::HandleDestruction()
+{
+    Super::HandleDestruction();
+
+    SetActorHiddenInGame(true);
+
+    SetActorTickEnabled(false);
+}
+
+void ACowPlayer::BeginPlay()
+{
+    Super::BeginPlay();
+
+    CowPlayerController = Cast<APlayerController>(GetController());
+}
+```
+
+In CowEnemy.h declare HandleDestruction
+```cpp
+public:
+	void HandleDestruction();
+```
+In CowEnemy.cpp 
+- Declare HandleDestruction()
+```cpp
+void ACowEnemy::HandleDestruction()
+{
+    Super::HandleDestruction();
+
+    Destroy();
+}
+```
+
+### 5.3.2: ActorDied() function
+
+- In Cow3rdPersonGameMode.h Declare the ActorDied() function. 
 - Add a Player variable to check if the dead actor was the Player or the Enemy. 
 - Override BeginPlay().
 ```cpp
+#include "GameFramework/GameModeBase.h"
+#include "Cow3rdPersonPlayerController.h"
+#include "CowPlayer.h"
 
+public:
+	void ActorDied(AActor* DeadActor);
+	
+protected:
+	virtual void BeginPlay() override;
 
+private:
+	ACowPlayer* CowPlayer;
 ```
 
-In Cow_3rdPersonGameMode.cpp 
-- Define ActorDied() function. If the actor who died was the Player (and not the Enemy) call the HandleDestruction() function.
+In Cow3rdPersonGameMode.cpp 
+- Define ActorDied() function and from inside that call the HandleDestruction() function.
+- Also get our player pawn to disable it in case our player died
 ```cpp
+#include "Kismet/GameplayStatics.h"
+#include "CowPlayer.h"
+#include "CowEnemy.h"
 
 
+void ACow3rdPersonGameMode::ActorDied(AActor* DeadActor)
+{
+    if (DeadActor == CowPlayer)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("my player was killed"));
+
+        CowPlayer->HandleDestruction();
+
+        if (CowPlayer->GetCowPlayerController())
+        {
+            CowPlayer->DisableInput(CowPlayer->GetCowPlayerController());
+        }
+    }
+    else if (ACowEnemy* DeadEnemy = Cast<ACowEnemy>(DeadActor))
+    {
+        DeadEnemy->HandleDestruction();
+    }
+}
+
+void ACow3rdPersonGameMode::BeginPlay()
+{
+    Super::BeginPlay();
+
+    CowPlayer = Cast<ACowPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+}
 ```
 
-### 5.3.2: Call the ActorDied() function from the HealthComponent class to perform the death actions when Health reaches 0.
+### 5.3.3: Call the ActorDied() function from the HealthComponent class to perform the death actions when Health reaches 0.
 
-In HealthComponent.cpp, call ActorDied() from the DamageTaken() callback function to perform death when damage makes the Health variables reach 0.
+In HealthComponent.cpp, 
+- In BeginPlay
+	- Use the multicast delegate function to call damage taken
+	- initialize the gamemode variable
+- call ActorDied() from the DamageTaken() callback function to perform death when damage makes the Health variables reach 0.
 ```cpp
+void UHealthComponent2::BeginPlay()
+{
+	Super::BeginPlay();
 
+	Health = MaxHealth;
 
+	//Call the multicast delegate function
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent2::DamageTaken);
+
+	GameMode = Cast<ACow3rdPersonGameMode>(UGameplayStatics::GetGameMode(this));
+}
+
+void UHealthComponent2::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser)
+{
+	if (Damage <= 0.f) return;
+
+	Health -= Damage;
+
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Hit!!!!! Remaining Life = %f"), Health);
+
+	if (Health <= 0.f && GameMode)
+	{
+		GameMode->ActorDied(DamagedActor);
+	}
+}
 ```
 
 
