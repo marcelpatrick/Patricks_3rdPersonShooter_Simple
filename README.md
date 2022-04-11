@@ -824,35 +824,70 @@ void UHealthComponent2::DamageTaken(AActor* DamagedActor, float Damage, const UD
 
 In BasePawn.h, declare the HandleDestruction() function:
 ```cpp
-
+public:
+	void HandleDestruction();
 ```
 In BasePawn.cpp Define HandleDestruction() funtion:
 ```cpp
-
+void ABasePawn::HandleDestruction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Handle destruction called, Actor Died!!!!!!!!!! "));
+}
 ```
-Implement HandleDestruction() in the Tower class.
+Implement HandleDestruction() in the Enemy class.
 
-In Tower.h, declare the HandleDestruction() function:
+In Enemy.h, declare the HandleDestruction() function:
 ```cpp
-
+public:
+	void HandleDestruction();
 ```
-In Tower.cpp Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
+In Tower.cpp 
+- Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
+- call Destroy() to destroy the mesh
 ```cpp
+void ACowEnemy::HandleDestruction()
+{
+    Super::HandleDestruction();
 
+    Destroy();
+}
 ```
 
-Implement HandleDestruction() in the tank class.
+Implement HandleDestruction() in the Player class.
 
-In Tank.h, declare the HandleDestruction() function and Declare a variable to store the tank player controller.
+In CowPlayer.h, 
+- Declare the HandleDestruction() function 
+- Declare a private variable to store the player controller.
+- Declare a getter function to access the player controller private variable by other classes
 ```cpp
+public:
+	void HandleDestruction();
+	
+	//Makea a custom public getter for us to get the private variable CowPlayerController from inside other classes
+	APlayerController* GetCowPlayerController() const
+	{
+		return CowPlayerController;
+	}
 
+private:
+	APlayerController* CowPlayerController; 
 ```
-In Tank.cpp Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
-Then hide actor so that it disappears 
-Disabled all actions on tick for this actor
-And define its bAlive variable to false so that we know it is dead
+In Player.cpp 
+- Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
+- Then hide actor so that it disappears 
+- Disable all actions on tick for this actor
+- And define its bAlive variable to false so that we know it is dead
 ```cpp
+void ACowPlayer::HandleDestruction()
+{
+    Super::HandleDestruction();
 
+    SetActorHiddenInGame(true);
+
+    SetActorTickEnabled(false);
+
+    bAlive = false;
+}
 ```
 
 
