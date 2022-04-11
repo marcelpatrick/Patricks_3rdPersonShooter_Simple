@@ -820,3 +820,39 @@ void UHealthComponent2::DamageTaken(AActor* DamagedActor, float Damage, const UD
 ```
 
 
+## 5.4: Define what actions happen when player gets destroyed.
+
+In BasePawn.h, declare the HandleDestruction() function:
+```cpp
+
+```
+In BasePawn.cpp Define HandleDestruction() funtion:
+```cpp
+
+```
+Implement HandleDestruction() in the Tower class.
+
+In Tower.h, declare the HandleDestruction() function:
+```cpp
+
+```
+In Tower.cpp Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
+```cpp
+
+```
+
+Implement HandleDestruction() in the tank class.
+
+In Tank.h, declare the HandleDestruction() function and Declare a variable to store the tank player controller.
+```cpp
+
+```
+In Tank.cpp Define HandleDestruction() funtion and in it call Super::HandleDestruction() to inherit the implementations of this function from the BasePawn.
+Then hide actor so that it disappears 
+Disabled all actions on tick for this actor
+And define its bAlive variable to false so that we know it is dead
+```cpp
+
+```
+
+
