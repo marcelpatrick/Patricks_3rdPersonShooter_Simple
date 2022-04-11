@@ -891,3 +891,38 @@ void ACowPlayer::HandleDestruction()
 ```
 
 
+
+## 5.5: GameMode: GAME OVER / WIN - LOOSE
+
+Define what happens when GameOver: either we destroy all enemies (Win Condition - GameOver = true) or we get destroyed (Loose Condition - GameOver = false)
+
+### 5.5.1: Declare variables:
+
+In ToonTanksGameMode.h
+Create a blueprint implementable event so that we can communicate our c++ code with our blueprints and show a Game Over widget on the scree. 
+```cpp
+
+```
+
+### 5.5.2: Define functions
+
+In ToonTanksGameMode.cpp 
+Call the GameOver function when our actor dies or when we have destroyed all enemies
+```cpp
+
+```
+
+### 5.5.3: Create the GameOver blueprint implementable event and show the widget
+
+Create a new widget blueprint: in the unreal engine > create a widget folter > right click > user interface > widget blueprint. call it WBP_EngGameWidget.
+Include a display text component and set it to "is variable".
+
+![image](https://user-images.githubusercontent.com/12215115/158021451-b0af04f8-3ca0-4c7b-9fa5-58317dade81a.png)
+
+in BP_ToonTanksGameMode, Event Graph, 
+
+Create an event game over, link it to Create WPB End Game Widget and ourput Set Text. Use select to show "You Won" or "You Lost" depending upon the boolean variable value that is coming out of event gameover: 
+
+![image](https://user-images.githubusercontent.com/12215115/158021553-acd3cce7-54cb-422a-be3e-dc0857058fba.png)
+
+
