@@ -894,22 +894,53 @@ void ACowPlayer::HandleDestruction()
 
 ## 5.5: GameMode: GAME OVER / WIN - LOOSE
 
-Define what happens when GameOver: either we destroy all enemies (Win Condition - GameOver = true) or we get destroyed (Loose Condition - GameOver = false)
+Define what happens when GameOver: either we destroy all enemies (Win Condition > GameOver = true) or we get destroyed (Loose Condition > GameOver = false)
 
 ### 5.5.1: Declare variables:
 
-In ToonTanksGameMode.h
-Create a blueprint implementable event so that we can communicate our c++ code with our blueprints and show a Game Over widget on the scree. 
+In Cow3rdPersonGameMode.h
+Create a blueprint implementable event so that we can communicate our c++ code with our blueprints and show a Game Over widget on the screen. 
 ```cpp
-
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
 ```
 
-### 5.5.2: Define functions
+### 5.5.2: Call functions
 
-In ToonTanksGameMode.cpp 
-Call the GameOver function when our actor dies or when we have destroyed all enemies
+In Cow3rdPersonGameMode.cpp 
+- Call the GameOver function when our actor dies or when we have destroyed all enemies
+- *** since GameOver() is a BlueprintImplementableEvent, we don't need to define this function in Cow3rdPersonGameMode.cpp because it will already be implemented in the blueprint.
 ```cpp
+void ACow3rdPersonGameMode::ActorDied(AActor* DeadActor)
+{
+    if (DeadActor == CowPlayer)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("my player was killed"));
 
+        CowPlayer->HandleDestruction();
+
+        if (CowPlayer->GetCowPlayerController())
+        {
+            CowPlayer->DisableInput(CowPlayer->GetCowPlayerController());
+        }
+        
+        GameOver(false);
+    }
+    else if (ACowEnemy* DeadEnemy = Cast<ACowEnemy>(DeadActor))
+    {
+        DeadEnemy->HandleDestruction();
+
+        TargetCows = GetTargetCowsCount();
+
+        UE_LOG(LogTemp, Warning, TEXT("numero de enemies = %i"), TargetCows);
+
+        if (TargetCows == 0)
+        {
+            GameOver(true);
+        }
+    }
+}
 ```
 
 ### 5.5.3: Create the GameOver blueprint implementable event and show the widget
