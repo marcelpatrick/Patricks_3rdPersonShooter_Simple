@@ -959,3 +959,47 @@ in BP_Cow3rdPersonGameMode, Event Graph,
 ![image](https://user-images.githubusercontent.com/12215115/158021553-acd3cce7-54cb-422a-be3e-dc0857058fba.png)
 
 
+
+# 6: Special Effects
+
+
+## 6.1: Particle Systems
+
+### 6.1.1: Declare variables
+
+In Projectile.h, Declare pointer variables of the type particle system for HitParticles and TrailParticles and make them editable anywhere.
+```cpp
+
+```
+
+In BasePawn.h, declare pointer variables of the type particle system for death particles
+```cpp
+
+```
+
+### 6.1.2: Spawn Particles
+
+In Projectile.cpp, Spawn the particle when we hit something, inside the apply damage if statement created previously
+```cpp
+
+```
+
+In Projectile.cpp, in the constructor function, construct the smoke trail particle variable and attach it to the root component so that it follows the projectile around.
+```cpp
+
+```
+
+In BasePawn.cpp, spawn the death particles emitter when the actor gets destroyed
+```cpp
+
+```
+
+### 6.1.3: Set particle systems in the Blueprints
+
+In BP_Projectile > select BP_Projectile > in our HitParticles variable field > select the particles we are going to use from the drop down.
+
+In BP_Projectile > Event Grapgh > select trail particles > details > Particles > Template variable > select projectile trail
+
+In BP_PawnTank > select BP_PawnTank(self) > in Details > Combat > Death Particles > select the particles mesh we are going to use
+
+In BP_PawnTurret > select BP_PawnTurret(self) > in Details > Combat > Death Particles > select the particles mesh we are going to use
