@@ -945,14 +945,14 @@ void ACow3rdPersonGameMode::ActorDied(AActor* DeadActor)
 
 ### 5.5.3: Create the GameOver blueprint implementable event and show the widget
 
-Create a new widget blueprint: in the unreal engine > create a widget folter > right click > user interface > widget blueprint. call it WBP_EngGameWidget.
+Create a new widget blueprint: in the unreal engine > create a new folter > right click in it > user interface > widget blueprint. call it WBP_EngGameWidget.
 Include a display text component and set it to "is variable".
 
 ![image](https://user-images.githubusercontent.com/12215115/158021451-b0af04f8-3ca0-4c7b-9fa5-58317dade81a.png)
 
-in BP_ToonTanksGameMode, Event Graph, 
+in BP_Cow3rdPersonGameMode, Event Graph, 
 
-Create an event game over, link it to Create WPB End Game Widget and ourput Set Text. Use select to show "You Won" or "You Lost" depending upon the boolean variable value that is coming out of event gameover: 
+Create an event game over, link it to Create WBP End Game Widget and ourput Set Text. Use select to show "You Won" or "You Lost" depending upon the boolean variable value that is coming out of event gameover: 
 
 ![image](https://user-images.githubusercontent.com/12215115/158021553-acd3cce7-54cb-422a-be3e-dc0857058fba.png)
 
