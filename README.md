@@ -952,8 +952,9 @@ Include a display text component and set it to "is variable".
 
 in BP_Cow3rdPersonGameMode, Event Graph, 
 
-- Create an event game over, link it to Create Widget, select class WBP_EngGameWidget and output Set Text. 
-- Use select to show "You Won" or "You Lost" depending upon the boolean variable value that is coming out of event gameover: 
+- Create an event game over, link it to Create Widget, select class WBP_EngGameWidget and output add to viewport linking the return value from the previous function into target
+- Pull another string from Create Widget return value and select Get [widget text variable name] text. Output a set Text function an link the output of Add to Viewport as its input.
+- Use select to show "You Won" or "You Lost" depending upon the boolean variable value that is coming out of event gameover and link it to SetText.
 
 ![image](https://user-images.githubusercontent.com/12215115/158021553-acd3cce7-54cb-422a-be3e-dc0857058fba.png)
 
