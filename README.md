@@ -969,29 +969,63 @@ in BP_Cow3rdPersonGameMode, Event Graph,
 
 In Projectile.h, Declare pointer variables of the type particle system for HitParticles and TrailParticles and make them editable anywhere.
 ```cpp
+private:
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UParticleSystem* HitParticles; 
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UParticleSystemComponent* TrailParticles;
 ```
 
 In BasePawn.h, declare pointer variables of the type particle system for death particles
 ```cpp
-
+private:
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UParticleSystem* DeathParticles; 
 ```
 
 ### 6.1.2: Spawn Particles
 
 In Projectile.cpp, Spawn the particle when we hit something, inside the apply damage if statement created previously
 ```cpp
-
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpuse, const FHitResult& Hit)
+{
+	if (HitParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Problema com as HitParticles!!!!!!"));
+	}
+}
 ```
 
 In Projectile.cpp, in the constructor function, construct the smoke trail particle variable and attach it to the root component so that it follows the projectile around.
 ```cpp
-
+AProjectile::AProjectile()
+{
+	TrailParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail")); 
+	TrailParticles->SetupAttachment(RootComponent);
+}
 ```
 
 In BasePawn.cpp, spawn the death particles emitter when the actor gets destroyed
 ```cpp
+void ABasePawn::HandleDestruction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Handle destruction called, Actor Died!!!!!!!!!! "));
 
+	if (DeathParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("houve um problema com as DeathParticles"));
+	}
+	
+}
 ```
 
 ### 6.1.3: Set particle systems in the Blueprints
@@ -1003,3 +1037,38 @@ In BP_Projectile > Event Grapgh > select trail particles > details > Particles >
 In BP_PawnTank > select BP_PawnTank(self) > in Details > Combat > Death Particles > select the particles mesh we are going to use
 
 In BP_PawnTurret > select BP_PawnTurret(self) > in Details > Combat > Death Particles > select the particles mesh we are going to use
+
+
+## 6.2: Sounds
+
+### 6.2.1: Declare Variables
+
+In Projectile.h, Declare the sound pointer variables of type USoundBase*
+```cpp
+
+```
+
+In BasePawn.h, declare a sound variable for when our any of the actors die
+```cpp
+
+```
+
+### 6.2.2: Play Sounds when actors get hit or die
+
+In Projectile.cpp, play launch sound when the projectile is spawned and the hit sound when it hits something
+```cpp
+
+```
+
+In BasePawn.cpp, play sound when any actor dies
+```cpp
+
+```
+
+### 6.2.3: Set the sound components in the Blueprints
+
+In BP_Projectile > Event Grapgh > select BP_Projectile(self) > Details > Combat > HitSound, LaunchSound > select the sound component from the dropdown menu
+
+In BP_PawnTank > Event Grapgh > select BP_PawnTank(self) > Details > Combat > DeathSound > select the sound component from the dropdown menu
+
+In BP_PawnTurret > Event Grapgh > select BP_PawnTurret(self) > Details > Combat > DeathSound > select the sound component from the dropdown menu
