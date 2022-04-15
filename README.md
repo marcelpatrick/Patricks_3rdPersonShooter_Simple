@@ -969,6 +969,9 @@ in BP_Cow3rdPersonGameMode, Event Graph,
 
 In Projectile.h, Declare pointer variables of the type particle system for HitParticles and TrailParticles and make them editable anywhere.
 ```cpp
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h" 
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	UParticleSystem* HitParticles; 
@@ -1045,6 +1048,8 @@ In BP_PawnTurret > select BP_PawnTurret(self) > in Details > Combat > Death Part
 
 In Projectile.h, Declare the sound pointer variables of type USoundBase*
 ```cpp
+#include "Sound/SoundBase.h"
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	USoundBase* HitSound; 
