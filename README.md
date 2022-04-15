@@ -1045,24 +1045,53 @@ In BP_PawnTurret > select BP_PawnTurret(self) > in Details > Combat > Death Part
 
 In Projectile.h, Declare the sound pointer variables of type USoundBase*
 ```cpp
+private:
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* HitSound; 
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* LaunchSound; 
 ```
 
 In BasePawn.h, declare a sound variable for when our any of the actors die
 ```cpp
-
+private:
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* DeathSound; 
 ```
 
 ### 6.2.2: Play Sounds when actors get hit or die
 
 In Projectile.cpp, play launch sound when the projectile is spawned and the hit sound when it hits something
 ```cpp
+void AProjectile::BeginPlay()
+{
+	Super::BeginPlay();
 
+	if (LaunchSound)
+	{
+		UGameplayStatics::PlaySound2D(this, LaunchSound);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Problema com LaunchSound"));
+	}
+}
 ```
 
 In BasePawn.cpp, play sound when any actor dies
 ```cpp
-
+void ABasePawn::HandleDestruction()
+{
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySound2D(this, DeathSound);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("problema com DeathSound"));
+	}
+}
 ```
 
 ### 6.2.3: Set the sound components in the Blueprints
